@@ -1,39 +1,36 @@
 pipeline {
-    agent { label "dev-server"}
+    agent any
     
     stages {
-        
-        stage("code"){
-            steps{
+        stage("Clone Code") {
+            steps {
                 git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
-                echo 'bhaiyya code clone ho gaya'
+                echo 'Code has been cloned successfully.'
             }
         }
-        stage("build and test"){
-            steps{
-                sh "docker build -t node-app-test-new ."
-                echo 'code build bhi ho gaya'
+        stage("Build and Test") {
+            steps {
+                // Add commands to build and test your application
+                echo 'Building and testing the code...'
+                // Example: npm install, npm test
             }
         }
-        stage("scan image"){
-            steps{
-                echo 'image scanning ho gayi'
+        stage("Security Scan") {
+            steps {
+                // Add steps to perform security scans
+                echo 'Performing security scan...'
             }
         }
-        stage("push"){
-            steps{
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker tag node-app-test-new:latest ${env.dockerHubUser}/node-app-test-new:latest"
-                sh "docker push ${env.dockerHubUser}/node-app-test-new:latest"
-                echo 'image push ho gaya'
-                }
+        stage("Push to Docker Hub") {
+            steps {
+                // Add steps to push the image to Docker Hub
+                echo 'Pushing the image to Docker Hub...'
             }
         }
-        stage("deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
-                echo 'deployment ho gayi'
+        stage("Deploy") {
+            steps {
+                // Add steps to deploy the application
+                echo 'Deploying the application...'
             }
         }
     }
